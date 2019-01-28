@@ -98,6 +98,10 @@ k8s_mdb_user(){
     kubectl -n $1 exec mongod-0 -c mongod-container -- mongo --eval 'db.getSiblingDB("admin").createUser({user:"'"${USER}"'",pwd:"'"${PASSWD}"'",roles: ["dbAdminAnyDatabase", "readWriteAnyDatabase"]});'
 }
 
+docker_start(){
+    sudo service docker start
+}
+
 docker_hub(){
     echo "$1" | docker login --username $2 --password-stdin
 }
@@ -178,11 +182,14 @@ k8s_mdb_relica_sync $NAMESPACE
 echo "Create MongoDB user $USER for Flask application"
 k8s_mdb_user $NAMESPACE
 
+echo "Start Docker"
+docker_start
+
 echo "Docker Build:  Login to Docker Hub"
 docker_hub $MY_PASSWORD $HUB_ACCOUNT
 
 echo "Docker Build:  Flask application - API to MongoDB database"
-docker build -t $HUB_ACCOUNT
+docker_build $HUB_ACCOUNT
 
 echo "Push Docker Flask Application image to Docker Hub"
 docker_push $HUB_ACCOUNT
