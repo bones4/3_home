@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ZONE=$1
-echo $ZONE
 echo "set zone"
 gcloud config set compute/zone $ZONE 
 
@@ -13,6 +12,9 @@ echo "get HELM"
 curl -o get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get
 chmod +x get_helm.sh
 ./get_helm.sh
+
+chmod "remove installer"
+rm -f get_helm.sh
 
 echo "Helm init"
 helm init --service-account tiller

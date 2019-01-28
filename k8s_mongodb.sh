@@ -132,7 +132,7 @@ gce_tls(){
 }
 
 gce_ingress_resource(){
-    kubectl apply -f ./ingress/tls_ingress.yml
+    k8s_apply tls_ingress.yml
 }
 
 
